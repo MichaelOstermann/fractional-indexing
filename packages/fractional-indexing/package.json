@@ -1,0 +1,34 @@
+{
+    "name": "@monstermann/fractional-indexing",
+    "type": "module",
+    "version": "0.0.0",
+    "description": "Lexicographically sortable keys for ordering lists without renumbering.",
+    "author": "Michael Ostermann <michaelostermann@me.com>",
+    "license": "MIT",
+    "homepage": "https://MichaelOstermann.github.io/fractional-indexing",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/MichaelOstermann/fractional-indexing.git"
+    },
+    "bugs": {
+        "url": "https://github.com/MichaelOstermann/fractional-indexing/issues"
+    },
+    "keywords": [],
+    "sideEffects": false,
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.mts",
+            "import": "./dist/index.mjs"
+        }
+    },
+    "main": "./dist/index.mjs",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.mts",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "bundle": "tsdown"
+    },
+    "dependencies": {}
+}
