@@ -302,8 +302,8 @@ The `jitterBits` parameter controls the size of the random space (2^jitterBits p
 
 ```ts
 // Two users inserting between the same keys will likely get different results
-FI.betweenJittered("a0", "a1"); // "a0Hq3f..." (random)
-FI.betweenJittered("a0", "a1"); // "a0TmWx..." (different random)
+FI.betweenJittered("a0", "a1", 20); // "a0Hq3f..." (random)
+FI.betweenJittered("a0", "a1", 20); // "a0TmWx..." (different random)
 
 // Useful for collaborative apps
 FI.betweenJittered(null, null); // random first key
@@ -348,3 +348,4 @@ FI.validate(""); // false (empty)
 FI.validate("5"); // false (invalid head)
 FI.validate("b1"); // false (head 'b' requires 2 body chars)
 ```
+
