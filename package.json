@@ -10,7 +10,7 @@
         "docs:build": "vitepress build docs"
     },
     "dependencies": {
-        "fractional-indexing": "^3.2.0"
+        "fractional-indexing": "^4.0.0"
     },
     "devDependencies": {
         "@monstermann/eslint-config": "^0.7.0",
