@@ -2,11 +2,7 @@
 
 <h1>fractional-indexing</h1>
 
-![Minified](https://img.shields.io/badge/Minified-2.62_KB-blue?style=flat-square&labelColor=%2315161D&color=%2369a1ff) ![Minzipped](https://img.shields.io/badge/Minzipped-989_B-blue?style=flat-square&labelColor=%2315161D&color=%2369a1ff)
-
 **Lexicographically sortable keys for ordering lists without renumbering.**
-
-[Documentation](https://MichaelOstermann.github.io/fractional-indexing)
 
 </div>
 
@@ -244,72 +240,13 @@ keys.sort(); // ["Zz", "a0", "a0V", "a1", "a2"]
 
 ## Installation
 
-```sh [npm]
-npm install @monstermann/fractional-indexing
-```
-
-```sh [pnpm]
-pnpm add @monstermann/fractional-indexing
-```
-
-```sh [yarn]
-yarn add @monstermann/fractional-indexing
-```
-
-```sh [bun]
+```sh
 bun add @monstermann/fractional-indexing
 ```
 
-## FI.between
+## API
 
-```ts
-function FI.between(
-    a: string | null,
-    b: string | null,
-): string
-```
-
-Generates a key that sorts between `a` and `b`. Pass `null` to indicate the start or end of the list.
-
-- `FI.between(null, null)` → first key in an empty list
-- `FI.between(key, null)` → append after `key`
-- `FI.between(null, key)` → prepend before `key`
-- `FI.between(a, b)` → insert between `a` and `b`
-
-Throws if `a >= b`.
-
-```ts
-FI.between(null, null); // "a0"
-FI.between("a0", null); // "a1"
-FI.between(null, "a0"); // "Zz"
-FI.between("a0", "a1"); // "a0V"
-FI.between("a0", "a0V"); // "a0G"
-```
-
-## FI.betweenJittered
-
-```ts
-function FI.betweenJittered(
-    a: string | null,
-    b: string | null,
-    jitterBits: number,
-): string
-```
-
-Like `FI.between`, but picks a random position within the range instead of the midpoint. This reduces collisions when multiple users insert at the same position concurrently.
-
-The `jitterBits` parameter controls the size of the random space (2^jitterBits possible positions). Higher values = fewer collisions but longer keys.
-
-```ts
-// Two users inserting between the same keys will likely get different results
-FI.betweenJittered("a0", "a1", 20); // "a0Hq3f..." (random)
-FI.betweenJittered("a0", "a1", 20); // "a0TmWx..." (different random)
-
-// Useful for collaborative apps
-FI.betweenJittered(null, null); // random first key
-FI.betweenJittered("a0", null, 10); // less jitter, shorter keys
-FI.betweenJittered("a0", null, 30); // more jitter, fewer collisions
-```
+Everything is documented with JSDoc, including examples: `FI.between`, `FI.betweenJittered` and `FI.validate`.
 
 ### Collision probability
 
@@ -331,21 +268,3 @@ function collisionProbability(
 ```
 
 Use this function to determine an appropriate `jitterBits` value for your scenario.
-
-## FI.validate
-
-```ts
-function FI.validate(key: string): boolean
-```
-
-Returns `true` if the key has valid structure (valid head character and sufficient length for the integer part).
-
-```ts
-FI.validate("a0"); // true
-FI.validate("b12"); // true
-FI.validate("a0V"); // true
-FI.validate(""); // false (empty)
-FI.validate("5"); // false (invalid head)
-FI.validate("b1"); // false (head 'b' requires 2 body chars)
-```
-

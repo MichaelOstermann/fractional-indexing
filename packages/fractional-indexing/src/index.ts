@@ -374,8 +374,35 @@ function fractionalMidpoint(a: string, b: string | null): string {
 
 const START_INTEGER = "a0"
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace FI {
+    /**
+     * # between
+     *
+     * ```ts
+     * function FI.between(a: string | null, b: string | null): string;
+     * ```
+     *
+     * Generates a key that sorts between `a` and `b`. Pass `null` to indicate the start or end of the list.
+     *
+     * - `FI.between(null, null)` → first key in an empty list
+     * - `FI.between(key, null)` → append after `key`
+     * - `FI.between(null, key)` → prepend before `key`
+     * - `FI.between(a, b)` → insert between `a` and `b`
+     *
+     * Throws if `a >= b`.
+     *
+     * ## Example
+     *
+     * ```ts
+     * import { FI } from "@monstermann/fractional-indexing";
+     *
+     * FI.between(null, null); // "a0"
+     * FI.between("a0", null); // "a1"
+     * FI.between(null, "a0"); // "Zz"
+     * FI.between("a0", "a1"); // "a0V"
+     * FI.between("a0", "a0V"); // "a0G"
+     * ```
+     */
     export function between(
         a: string | null,
         b: string | null,
@@ -410,6 +437,34 @@ export namespace FI {
         return aInt + fractionalMidpoint(getFractionalPart(a), null)
     }
 
+    /**
+     * # betweenJittered
+     *
+     * ```ts
+     * function FI.betweenJittered(
+     *     a: string | null,
+     *     b: string | null,
+     *     jitterBits: number,
+     * ): string;
+     * ```
+     *
+     * Like `FI.between`, but picks a random position within the range instead of the midpoint. This reduces collisions when multiple users insert at the same position concurrently.
+     *
+     * The `jitterBits` parameter controls the size of the random space (2^jitterBits possible positions). Higher values = fewer collisions but longer keys.
+     *
+     * ## Example
+     *
+     * ```ts
+     * import { FI } from "@monstermann/fractional-indexing";
+     *
+     * // Two users inserting between the same keys will likely get different results
+     * FI.betweenJittered("a0", "a1", 20); // "a0Hq3f..." (random)
+     * FI.betweenJittered("a0", "a1", 20); // "a0TmWx..." (different random)
+     *
+     * FI.betweenJittered("a0", null, 10); // less jitter, shorter keys
+     * FI.betweenJittered("a0", null, 30); // more jitter, fewer collisions
+     * ```
+     */
     export function betweenJittered(
         a: string | null,
         b: string | null,
@@ -431,6 +486,28 @@ export namespace FI {
         return between(lo, hi)
     }
 
+    /**
+     * # validate
+     *
+     * ```ts
+     * function FI.validate(key: string): boolean;
+     * ```
+     *
+     * Returns `true` if the key has valid structure (valid head character and sufficient length for the integer part).
+     *
+     * ## Example
+     *
+     * ```ts
+     * import { FI } from "@monstermann/fractional-indexing";
+     *
+     * FI.validate("a0"); // true
+     * FI.validate("b12"); // true
+     * FI.validate("a0V"); // true
+     * FI.validate(""); // false (empty)
+     * FI.validate("5"); // false (invalid head)
+     * FI.validate("b1"); // false (head 'b' requires 2 body chars)
+     * ```
+     */
     export function validate(key: string): boolean {
         // Must not be empty
         if (!key) return false

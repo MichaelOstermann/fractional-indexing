@@ -5,7 +5,7 @@
     "description": "Lexicographically sortable keys for ordering lists without renumbering.",
     "author": "Michael Ostermann <michaelostermann@me.com>",
     "license": "MIT",
-    "homepage": "https://MichaelOstermann.github.io/fractional-indexing",
+    "homepage": "https://github.com/MichaelOstermann/fractional-indexing",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/MichaelOstermann/fractional-indexing.git"
